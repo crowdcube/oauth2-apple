@@ -208,15 +208,14 @@ class Apple extends AbstractProvider
      */
     public function getAccessToken($grant, array $options = [])
     {
-        $signer    = new Sha256();
-        $issuedAt  = date_create_immutable(time());
-        $expiresAt = date_create_immutable($issuedAt + 600);
+        $signer = new Sha256();
+        $time = time();
 
         $token = (new Builder())
             ->issuedBy($this->teamId)
             ->permittedFor('https://appleid.apple.com')
-            ->issuedAt($issuedAt)
-            ->expiresAt($expiresAt)
+            ->issuedAt($time)
+            ->expiresAt($time + 600)
             ->relatedTo($this->clientId)
             ->withClaim('sub', $this->clientId)
             ->withHeader('alg', 'ES256')
